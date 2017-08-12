@@ -1,6 +1,6 @@
 function Set-LabArtifacts {
     $ProgressPreference = 'SilentlyContinue' # Ignore progress updates (100X speedup)
-    Invoke-WebRequest -Uri "https://github.com/cloudacademy/azure-lab-provisioners/azure-storage/raw/master/post-deploy/image.png" -OutFile C:\Users\student\Desktop\image.png
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/azure-storage/image.png" -OutFile C:\Users\student\Desktop\image.png
 }
 
 function Disable-InternetExplorerESC {
