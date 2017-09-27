@@ -1,6 +1,22 @@
+function Install-AzurePowerShell {
+    $ProgressPreference = 'SilentlyContinue'
+    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
+    Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+    Install-Module AzureRM -Confirm:$false
+}
+
+
 function Set-LabArtifacts {
     $ProgressPreference = 'SilentlyContinue' # Ignore progress updates (100X speedup)
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/keyvault-diskencryption-lab/New-EncryptedVM.ps1" -OutFile C:\Users\student\Desktop\New-EncryptedVM.ps1
+    # Create backup
+    $path = "C:\Scripts"
+    if(!(Test-Path $path))
+    {
+        New-Item -ItemType Directory -Force -Path C:\Scripts
+    }
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/keyvault-diskencryption-lab/New-EncryptedVM.ps1" -OutFile $($path + "\" + "New-EncryptVM.ps1")
+
 }
 
 function Disable-InternetExplorerESC {
@@ -35,3 +51,4 @@ Stop-Service -displayname "Windows Update"
 Set-LabArtifacts
 Disable-UserAccessControl
 Disable-InternetExplorerESC
+Install-AzurePowerShell
