@@ -15,7 +15,7 @@ function Set-LabArtifacts {
     {
         New-Item -ItemType Directory -Force -Path C:\Scripts
     }
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/keyvault-diskencryption-lab/New-EncryptedVM.ps1" -OutFile $($path + "\" + "New-EncryptVM.ps1")
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/keyvault-diskencryption-lab/New-EncryptedVM.ps1" -OutFile $($path + "\" + "New-EncryptedVM.ps1")
 
 }
 
