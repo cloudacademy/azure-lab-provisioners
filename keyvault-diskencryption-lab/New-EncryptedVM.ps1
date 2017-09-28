@@ -16,9 +16,9 @@ $VNetName = "Encrypt-VNet"
 $InterfaceName = $VMName + "-NIC"
 $PublicIPName = $VMName + "-PIP"
 $ComputerName = $VMName
-$VMSize = "Standard_A2_v2"
-$username = "admin123"
-$password = "Password123!@#"
+$VMSize = "Standard_A1_v2"
+$username = "student"
+$password = "1Cloud_Academy_Labs!"
 $StorageName = "storage" + $VMName.ToLower()
 $StorageType = "Standard_LRS"
 $OSDiskName = $VMName + "OSDisk"
@@ -34,11 +34,11 @@ $OSVersion = "latest"
 
 #region KeyVault
 ############################## Create and Deploy the KeyVault and Keys ###############################
-$keyVaultName = "MyKeyVault1Commercial"
-$aadAppName = "MyApp1"
+$keyVaultName = $("MyKeyVault1" + "-" + $ResourceGroupName)
+$aadAppName = $("MyApp1" + "-" + $ResourceGroupName)
 $aadClientID = ""
 $aadClientSecret = ""
-$keyEncryptionKeyName = "MyKey1"
+$keyEncryptionKeyName = $("MyKey1" + "-" + $ResourceGroupName)
 
 # Create a new AD application
 Write-Host "Creating a new AD Application: $aadAppName..."
