@@ -10,7 +10,7 @@ Add-AzureRmAccount -SubscriptionId "a5aa4093-4fc8-4d40-9706-eca7c19c90fd"
 
 $ResourceGroupName = "EncryptRG"
 $VMName = "EncryptWin1"
-$Location = "East US"
+$Location = "South Central US"
 $Subnet1Name = "default"
 $VNetName = "Encrypt-VNet"
 $InterfaceName = $VMName + "-NIC"
