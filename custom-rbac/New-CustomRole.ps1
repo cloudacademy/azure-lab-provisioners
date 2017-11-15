@@ -18,8 +18,8 @@ $role.Actions.Add("Microsoft.Network/*/read")
 $role.Actions.Add("Microsoft.Compute/virtualMachines/*/read")
 $role.Actions.Add("Microsoft.Resources/subscriptions/resourceGroups/read")
 $role.Actions.Add("Microsoft.Support/*")
-# You will see later what happens as a result of the following action not being added
-#$role.Actions.Add("Microsoft.Network/networkInterfaces/effectiveNetworkSecurityGroups/action")
+# You will see later what happens as a result of the following NotAction
+$role.NotActions.Add("Microsoft.Network/networkInterfaces/effectiveNetworkSecurityGroups/action")
 
 # This role is only assignable within your subscription
 $role.AssignableScopes.Clear()
