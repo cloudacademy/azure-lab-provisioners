@@ -10,7 +10,7 @@ $role = Get-AzureRmRoleDefinition "Network Contributor"
 # Modify the role to suit a custom CloudAcademy Network Contributor role
 $role.Id = $null
 $role.Name = "CloudAcademy Network Contributor"
-$role.Description = "Can view and modify NSG’s but cannot view Effective Security Rules"
+$role.Description = "Can view and modify NSGs but cannot view Effective Security Rules"
 $role.Actions.Clear()
 $role.Actions.Add("Microsoft.Authorization/*/read")
 $role.Actions.Add("Microsoft.Insights/alertRules/*")
