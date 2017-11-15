@@ -14,10 +14,12 @@ $role.Description = "Can view and modify NSGs but cannot view Effective Security
 $role.Actions.Clear()
 $role.Actions.Add("Microsoft.Authorization/*/read")
 $role.Actions.Add("Microsoft.Insights/alertRules/*")
-$role.Actions.Add("Microsoft.Network/*/read")
-$role.Actions.Add("Microsoft.Compute/virtualMachines/*/read")
+$role.Actions.Add("Microsoft.Network/*")
+$role.Actions.Add("Microsoft.ResourceHealth/availabilityStatuses/read")
+$role.Actions.Add("Microsoft.Resources/deployments/*")
 $role.Actions.Add("Microsoft.Resources/subscriptions/resourceGroups/read")
 $role.Actions.Add("Microsoft.Support/*")
+$role.Actions.Add("Microsoft.Compute/virtualMachines/*/read")
 # You will see later what happens as a result of the following NotAction
 $role.NotActions.Add("Microsoft.Network/networkInterfaces/effectiveNetworkSecurityGroups/action")
 
