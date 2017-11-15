@@ -1,5 +1,5 @@
 # Sign in to authenticate Azure Resource Manager cmdlet requests
-Add-AzureRmAccount
+Add-AzureRmAccount -SubscriptionId c4fd644c-22da-4e2e-8c6c-86dfa6a28964
 
 # Get the subscription that the role will be assignable within
 $SubscriptionId = $(Get-AzureRmSubscription).Id
