@@ -47,7 +47,8 @@ $defaultHomePage = 'http://contoso.com'
 $now = [System.DateTime]::Now
 $oneYearFromNow = $now.AddYears(1)
 $aadClientSecret = [Guid]::NewGuid()
-$ADApp = New-AzureRmADApplication -DisplayName $aadAppName -HomePage $defaultHomePage -IdentifierUris $identifierUri -StartDate $now -EndDate $oneYearFromNow -Password $aadClientSecret
+$ADAppPassword = ConvertTo-SecureString -String $aadClientSecret.ToString() -AsPlainText -Force
+$ADApp = New-AzureRmADApplication -DisplayName $aadAppName -HomePage $defaultHomePage -IdentifierUris $identifierUri -StartDate $now -EndDate $oneYearFromNow -Password $ADAppPassword
 $servicePrincipal = New-AzureRmADServicePrincipal -ApplicationId $ADApp.ApplicationId
 $aadClientID = $servicePrincipal.ApplicationId
 Write-Host "Successfully created a new AAD Application: $aadAppName with ID: $aadClientID"
