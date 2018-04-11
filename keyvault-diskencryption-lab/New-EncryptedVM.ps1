@@ -1,5 +1,5 @@
-﻿# Author: Christopher Jackson
-# 4/5/2017
+﻿# Author: Christopher Jackson, Logan Rakai
+# 11/4/2018
 # New-EncryptedVM.ps1
 #
 # This PowerShell script creates a new Resource Group where it deploys a new Windows VM, a Keyvault with an AD App and KeyEncryptionKey which is uses to encrypt the VM
@@ -19,7 +19,7 @@ $ComputerName = $VMName
 $VMSize = "Standard_A1_v2"
 $username = "student"
 $password = "1Cloud_Academy_Labs!"
-$StorageName = "storage" + $VMName.ToLower()
+$StorageName = "storage" + $VMName.ToLower() + $ResourceGroupName.replace("cal-","")
 $StorageType = "Standard_LRS"
 $OSDiskName = $VMName + "OSDisk"
 $OSPublisherName = "MicrosoftWindowsServer"
