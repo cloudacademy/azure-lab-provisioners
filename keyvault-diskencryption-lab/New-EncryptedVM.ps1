@@ -56,8 +56,10 @@ Write-Host "Successfully created a new AAD Application: $aadAppName with ID: $aa
 # Create the KeyVault
 Write-Host "Creating the KeyVault: $keyVaultName..."
 $keyVault = New-AzureRmKeyVault -VaultName $keyVaultName -ResourceGroupName $ResourceGroupName -Sku Standard -Location $Location;
-# Set the permissions to 'all' and Enable the DiskEncryption Policy
-Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ServicePrincipalName $aadClientID -PermissionsToKeys all -PermissionsToSecrets all
+# Set the permissions required to enable the DiskEncryption Policy
+Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ServicePrincipalName $aadClientID `
+   -PermissionsToKeys get,list,encrypt,decrypt,create,import,sign,verify,wrapKey,unwrapKey `
+   -PermissionsToSecrets get,list,set
 Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -EnabledForDiskEncryption
 $diskEncryptionKeyVaultUrl = $keyVault.VaultUri
 $keyVaultResourceId = $keyVault.ResourceId
@@ -82,7 +84,6 @@ Write-Host "keyEncryptionKeyURL: $keyEncryptionKeyUrl" -foregroundcolor Cyan
 # Create storage account
 Write-Host "Creating storage account: $StorageName..."
 $StorageAccount = New-AzureRmStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageName -SkuName $StorageType -Location $Location
-
 
 # Create a Public IP
 Write-Host "Creating a Public IP: $PublicIPName..."
