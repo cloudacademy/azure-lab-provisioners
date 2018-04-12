@@ -102,7 +102,7 @@ $Credential = New-Object System.Management.Automation.PSCredential -ArgumentList
 # Create the basic VM config
 Write-Host "Creating the basic VM config..."
 $VirtualMachine = New-AzureRmVMConfig -VMName $VMName -VMSize $VMSize
-$VirtualMachine = Set-AzureRmVMOperatingSystem -VM $VirtualMachine -ComputerName $ComputerName -Windows -Credential $Credential
+$VirtualMachine = Set-AzureRmVMOperatingSystem -VM $VirtualMachine -ComputerName $ComputerName -Windows -Credential $Credential -ProvisionVMAgent
 $VirtualMachine = Add-AzureRmVMNetworkInterface -VM $VirtualMachine -Id $myNIC.Id
 
 # Create OS Disk Uri and attach it to the VM
