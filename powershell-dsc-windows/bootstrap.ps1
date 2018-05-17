@@ -25,7 +25,7 @@ function Disable-UserAccessControl {
 Set-MpPreference -DisableRealtimeMonitoring $true
 
 # Disable Windows update
-Stop-Service -displayname "Windows Update"
+Stop-Service -NoWait -displayname "Windows Update"
 
 Disable-UserAccessControl
 Disable-InternetExplorerESC
