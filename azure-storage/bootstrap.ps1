@@ -1,5 +1,6 @@
 function Set-LabArtifacts {
     $ProgressPreference = 'SilentlyContinue' # Ignore progress updates (100X speedup)
+    [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls" # GitHub only supports tls 1.2 now (PS use 1.0 by default)
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/azure-storage/image.png" -OutFile C:\Users\student\Desktop\image.png
 }
 
@@ -30,7 +31,7 @@ function Disable-UserAccessControl {
 Set-MpPreference -DisableRealtimeMonitoring $true
 
 # Disable Windows update
-Stop-Service -displayname "Windows Update"
+Stop-Service -NoWait -displayname "Windows Update"
 
 Set-LabArtifacts
 Disable-UserAccessControl
