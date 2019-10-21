@@ -2,9 +2,8 @@ function Install-AzurePowerShell {
     $ProgressPreference = 'SilentlyContinue'
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
     Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-    Install-Module AzureRM -Confirm:$false
+    Install-Module Az.Accounts,Az.Resources,Az.RecoveryServices -Confirm:$false
 }
-
 
 function Set-LabArtifacts {
     $ProgressPreference = 'SilentlyContinue' # Ignore progress updates (100X speedup)
@@ -49,7 +48,6 @@ Set-MpPreference -DisableRealtimeMonitoring $true
 # Disable Windows update
 Stop-Service -NoWait -displayname "Windows Update"
 
-Set-LabArtifacts
 Disable-UserAccessControl
 Disable-InternetExplorerESC
 Install-AzurePowerShell
