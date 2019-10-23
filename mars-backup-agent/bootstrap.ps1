@@ -42,6 +42,8 @@ function Disable-UserAccessControl {
     Write-Host "User Access Control (UAC) has been disabled." -ForegroundColor Green    
 }
 
+Disable-InternetExplorerESC
+
 # Disable Windows Defender real-time monitoring
 Set-MpPreference -DisableRealtimeMonitoring $true
 
@@ -49,5 +51,3 @@ Set-MpPreference -DisableRealtimeMonitoring $true
 Stop-Service -NoWait -displayname "Windows Update"
 
 Disable-UserAccessControl
-Disable-InternetExplorerESC
-Install-AzurePowerShell
