@@ -8,7 +8,7 @@
 
 Add-AzAccount -SubscriptionId "b197ebe7-8059-4dbe-90a8-15f7bf3d746f" 
 
-$ResourceGroupName = " cal-930-16 "
+$ResourceGroupName = "cal-930-16"
 $VMName = "EncryptWin1"
 $Location = "South Central US"
 $Subnet1Name = "default"
