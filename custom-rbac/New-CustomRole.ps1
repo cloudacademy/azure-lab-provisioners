@@ -1,11 +1,11 @@
 # Sign in to authenticate Azure Resource Manager cmdlet requests
-Add-AzureRmAccount -SubscriptionId c4fd644c-22da-4e2e-8c6c-86dfa6a28964
+Add-AzAccount -SubscriptionId c4fd644c-22da-4e2e-8c6c-86dfa6a28964
 
 # Get the subscription that the role will be assignable within
-$SubscriptionId = $(Get-AzureRmSubscription).Id
+$SubscriptionId = $(Get-AzSubscription).Id
 
 # Use the Network Contributor role as a template
-$role = Get-AzureRmRoleDefinition "Network Contributor"
+$role = Get-AzRoleDefinition "Network Contributor"
 
 # Modify the role to suit a custom CloudAcademy Network Contributor role
 $role.Id = $null
@@ -28,4 +28,4 @@ $role.AssignableScopes.Clear()
 $role.AssignableScopes.Add("/subscriptions/" + $SubscriptionId)
 
 # Create the role
-New-AzureRmRoleDefinition -Role $role
+New-AzRoleDefinition -Role $role
