@@ -6,9 +6,9 @@
 # Please login to your Azure Environment before running this script.  This script create all new resources
 # For more info: https://docs.microsoft.com/en-us/azure/security/azure-security-disk-encryption  
 
-Add-AzureRmAccount -SubscriptionId "a5aa4093-4fc8-4d40-9706-eca7c19c90fd"
+Add-AzAccount -SubscriptionId "b197ebe7-8059-4dbe-90a8-15f7bf3d746f" 
 
-$ResourceGroupName = "EncryptRG"
+$ResourceGroupName = " cal-930-16 "
 $VMName = "EncryptWin1"
 $Location = "South Central US"
 $Subnet1Name = "default"
@@ -16,7 +16,7 @@ $VNetName = "Encrypt-VNet"
 $InterfaceName = $VMName + "-NIC"
 $PublicIPName = $VMName + "-PIP"
 $ComputerName = $VMName
-$VMSize = "Standard_A1_v2"
+$VMSize = " Standard_B2ms"
 $username = "student"
 $password = "1Cloud_Academy_Labs!"
 $StorageName = "storage" + $VMName.ToLower() + $ResourceGroupName.replace("-","").replace("cal","")
@@ -24,7 +24,7 @@ $StorageType = "Standard_LRS"
 $OSDiskName = $VMName + "OSDisk"
 $OSPublisherName = "MicrosoftWindowsServer"
 $OSOffer = "WindowsServer"
-$OSSKu = "2012-R2-Datacenter"
+$OSSKu = "2019-Datacenter"
 $OSVersion = "latest"
 
 
@@ -48,25 +48,25 @@ $now = [System.DateTime]::Now
 $oneYearFromNow = $now.AddYears(1)
 $aadClientSecret = [Guid]::NewGuid()
 $ADAppPassword = ConvertTo-SecureString -String $aadClientSecret.ToString() -AsPlainText -Force
-$ADApp = New-AzureRmADApplication -DisplayName $aadAppName -HomePage $defaultHomePage -IdentifierUris $identifierUri -StartDate $now -EndDate $oneYearFromNow -Password $ADAppPassword
-$servicePrincipal = New-AzureRmADServicePrincipal -ApplicationId $ADApp.ApplicationId
+$ADApp =  New-AzADApplication -DisplayName $aadAppName -HomePage $defaultHomePage -IdentifierUris $identifierUri -StartDate $now -EndDate $oneYearFromNow -Password $ADAppPassword
+$servicePrincipal = New-AzADServicePrincipal -ApplicationId $ADApp.ApplicationId
 $aadClientID = $servicePrincipal.ApplicationId
 Write-Host "Successfully created a new AAD Application: $aadAppName with ID: $aadClientID"
 
 # Create the KeyVault
 Write-Host "Creating the KeyVault: $keyVaultName..."
-$keyVault = New-AzureRmKeyVault -VaultName $keyVaultName -ResourceGroupName $ResourceGroupName -Sku Standard -Location $Location;
+$keyVault = New-AzKeyVault -VaultName $keyVaultName -ResourceGroupName $ResourceGroupName -Sku Standard -Location $Location;
 # Set the permissions required to enable the DiskEncryption Policy
-Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -ServicePrincipalName $aadClientID `
+Set-AzKeyVaultAccessPolicy -VaultName $keyVaultName -ServicePrincipalName $aadClientID `
    -PermissionsToKeys get,list,encrypt,decrypt,create,import,sign,verify,wrapKey,unwrapKey `
    -PermissionsToSecrets get,list,set
-Set-AzureRmKeyVaultAccessPolicy -VaultName $keyVaultName -EnabledForDiskEncryption
+Set-AzKeyVaultAccessPolicy -VaultName $keyVaultName -EnabledForDiskEncryption
 $diskEncryptionKeyVaultUrl = $keyVault.VaultUri
 $keyVaultResourceId = $keyVault.ResourceId
 
 # Create the KeyEncryptionKey (KEK)
 Write-Host "Creating the KeyEncryptionKey (KEK): $keyEncryptionKeyName..."
-$kek = Add-AzureKeyVaultKey -VaultName $keyVaultName -Name $keyEncryptionKeyName -Destination Software
+$kek = Add-AzKeyVaultKey -VaultName $keyVaultName -Name $keyEncryptionKeyName -Destination Software
 $keyEncryptionKeyUrl = $kek.Key.Kid
 
 # Output the values of the KeyVault
@@ -77,23 +77,23 @@ Write-Host "aadClientSecret: $aadClientSecret" -foregroundcolor Cyan
 Write-Host "diskEncryptionKeyVaultUrl: $diskEncryptionKeyVaultUrl" -foregroundcolor Cyan
 Write-Host "keyVaultResourceId: $keyVaultResourceId" -foregroundcolor Cyan
 Write-Host "keyEncryptionKeyURL: $keyEncryptionKeyUrl" -foregroundcolor Cyan
-#endregion
+#endregion 
 
-#region VM
+ #region VM
 ############################## Create and Deploy the VM ###############################
 # Create storage account
 Write-Host "Creating storage account: $StorageName..."
-$StorageAccount = New-AzureRmStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageName -SkuName $StorageType -Location $Location
+$StorageAccount = New-AzStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageName -SkuName $StorageType -Location $Location
 
 # Create a Public IP
 Write-Host "Creating a Public IP: $PublicIPName..."
-$publicIP = New-AzureRmPublicIpAddress -Name $PublicIPName -ResourceGroupName $ResourceGroupName -Location $Location -AllocationMethod Dynamic
+$publicIP = New-AzPublicIpAddress -Name $PublicIPName -ResourceGroupName $ResourceGroupName -Location $Location -AllocationMethod Dynamic
 
 # Create the VNet
 Write-Host "Creating a VNet: $VNetName..."
-$subnetConfig = New-AzureRmVirtualNetworkSubnetConfig -Name $Subnet1Name -AddressPrefix "192.168.1.0/24"
-$VNet = New-AzureRmVirtualNetwork -ResourceGroupName $ResourceGroupName -Name $VNetName -AddressPrefix "192.168.0.0/16" -Location $Location -Subnet $subnetConfig
-$myNIC = New-AzureRmNetworkInterface -Name $InterfaceName -ResourceGroupName $ResourceGroupName -Location $Location -SubnetId $VNet.Subnets[0].Id -PublicIpAddressId $publicip.Id
+$subnetConfig = New-AzVirtualNetworkSubnetConfig -Name $Subnet1Name -AddressPrefix "192.168.1.0/24"
+$VNet = New-AzVirtualNetwork -ResourceGroupName $ResourceGroupName -Name $VNetName -AddressPrefix "192.168.0.0/16" -Location $Location -Subnet $subnetConfig
+$myNIC = New-AzNetworkInterface -Name $InterfaceName -ResourceGroupName $ResourceGroupName -Location $Location -SubnetId $VNet.Subnets[0].Id -PublicIpAddressId $publicip.Id
 
 # Create the VM Credentials
 Write-Host "Creating VM Credentials..."
@@ -102,32 +102,32 @@ $Credential = New-Object System.Management.Automation.PSCredential -ArgumentList
 
 # Create the basic VM config
 Write-Host "Creating the basic VM config..."
-$VirtualMachine = New-AzureRmVMConfig -VMName $VMName -VMSize $VMSize
-$VirtualMachine = Set-AzureRmVMOperatingSystem -VM $VirtualMachine -ComputerName $ComputerName -Windows -Credential $Credential -ProvisionVMAgent
-$VirtualMachine = Add-AzureRmVMNetworkInterface -VM $VirtualMachine -Id $myNIC.Id
+$VirtualMachine = New-AzVMConfig -VMName $VMName -VMSize $VMSize
+$VirtualMachine = Set-AzVMOperatingSystem -VM $VirtualMachine -ComputerName $ComputerName -Windows -Credential $Credential -ProvisionVMAgent
+$VirtualMachine = Add-AzVMNetworkInterface -VM $VirtualMachine -Id $myNIC.Id
 
 # Create OS Disk Uri and attach it to the VM
 Write-Host "Creating the OSDisk '$OSDiskName' for the VM..."
 $NewOSDiskVhdUri = $StorageAccount.PrimaryEndpoints.Blob.ToString() + "vhds/" + $vmName.ToLower() + "-" + $osDiskName + '.vhd'
-$VirtualMachine = Set-AzureRmVMSourceImage -VM $VirtualMachine -PublisherName $OSPublisherName -Offer $OSOffer -Skus $OSSKu -Version $OSVersion
-$VirtualMachine = Set-AzureRmVMOSDisk -VM $VirtualMachine -Name $osDiskName -VhdUri $NewOSDiskVhdUri -CreateOption FromImage
+$VirtualMachine = Set-AzVMSourceImage -VM $VirtualMachine -PublisherName $OSPublisherName -Offer $OSOffer -Skus $OSSKu -Version $OSVersion
+$VirtualMachine = Set-AzVMOSDisk -VM $VirtualMachine -Name $osDiskName -VhdUri $NewOSDiskVhdUri -CreateOption FromImage
 
 # Create the VM
 Write-Host "Building the VM: $VMName..."
-New-AzureRmVM -ResourceGroupName $ResourceGroupName -Location $Location -VM $VirtualMachine
-#endregion
+New-AzVM -ResourceGroupName $ResourceGroupName -Location $Location -VM $VirtualMachine
+#endregion 
 
 #region Encryption Extension
 ############################## Deploy the VM Encryption Extension ###############################
 # Build the encryption extension
 Write-Host "Deploying the VM Encryption Extension..."
-Set-AzureRmVMDiskEncryptionExtension -ResourceGroupName $resourceGroupName -VMName $vmName `
+Set-AzVMDiskEncryptionExtension -ResourceGroupName $resourceGroupName -VMName $vmName `
 -AadClientID $aadClientID -AadClientSecret $aadClientSecret `
 -DiskEncryptionKeyVaultUrl $diskEncryptionKeyVaultUrl -DiskEncryptionKeyVaultId $keyVaultResourceId `
 -VolumeType "OS" `
 -KeyEncryptionKeyUrl $keyEncryptionKeyUrl `
 -KeyEncryptionKeyVaultId $keyVaultResourceId `
--Force
+-Force 
 
-Get-AzureRmVMDiskEncryptionStatus -ResourceGroupName $ResourceGroupName -VMName $VMName
+Get-AzVMDiskEncryptionStatus -ResourceGroupName $ResourceGroupName -VMName $VMName
 #endregion
