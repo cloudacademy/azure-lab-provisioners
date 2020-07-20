@@ -49,7 +49,7 @@ function Disable-UserAccessControl {
 # Disable Windows update
 #Stop-Service -NoWait -displayname "Windows Update"
 
-Set-LabArtifacts
 Disable-UserAccessControl
 Disable-InternetExplorerESC
 Install-AzurePowerShell
+Set-LabArtifacts
