@@ -1,5 +1,4 @@
-﻿# Author: Christopher Jackson, Logan Rakai
-# 11/4/2018
+# Author: Christopher Jackson, Logan Rakai
 # New-EncryptedVM.ps1
 #
 # This PowerShell script creates a new Resource Group where it deploys a new Windows VM, a Keyvault with an AD App and KeyEncryptionKey which is uses to encrypt the VM
@@ -42,16 +41,16 @@ $keyEncryptionKeyName = $("MyKey1" + "-" + $ResourceGroupName)
 
 # Create a new AD application
 Write-Host "Creating a new AD Application: $aadAppName..."
-$identifierUri = [string]::Format("http://localhost:8080/{0}",[Guid]::NewGuid().ToString("N"))
+$identifierUri = [string]::Format("local.labscloudacademy.onmicrosoft.com:8080/{0}",[Guid]::NewGuid().ToString("N"))
 $defaultHomePage = 'http://contoso.com'
 $now = [System.DateTime]::Now
 $oneYearFromNow = $now.AddYears(1)
 $aadClientSecret = [Guid]::NewGuid()
 $ADAppPassword = ConvertTo-SecureString -String $aadClientSecret.ToString() -AsPlainText -Force
 $ADApp =  New-AzADApplication -DisplayName $aadAppName -HomePage $defaultHomePage -IdentifierUris $identifierUri -StartDate $now -EndDate $oneYearFromNow -Password $ADAppPassword
-$servicePrincipal = New-AzADServicePrincipal -ApplicationId $ADApp.ApplicationId
+$servicePrincipal = New-AzADServicePrincipal -ApplicationId $ADApp.ApplicationId -WarningAction SilentlyContinue
 $aadClientID = $servicePrincipal.ApplicationId
-Write-Host "Successfully created a new AAD Application: $aadAppName with ID: $aadClientID"
+Write-Host "Successfully created a new AAD Application: $aadAppName with ID: $aadClientID" 
 
 # Create the KeyVault
 Write-Host "Creating the KeyVault: $keyVaultName..."
