@@ -41,20 +41,20 @@ $keyEncryptionKeyName = $("MyKey1" + "-" + $ResourceGroupName)
 
 # Create a new AD application
 Write-Host "Creating a new AD Application: $aadAppName..."
-$identifierUri = [string]::Format("local.labscloudacademy.onmicrosoft.com:8080/{0}",[Guid]::NewGuid().ToString("N"))
-$defaultHomePage = 'http://contoso.com'
 $now = [System.DateTime]::Now
 $oneYearFromNow = $now.AddYears(1)
-$aadClientSecret = [Guid]::NewGuid()
-$ADAppPassword = ConvertTo-SecureString -String $aadClientSecret.ToString() -AsPlainText -Force
-$ADApp =  New-AzADApplication -DisplayName $aadAppName -HomePage $defaultHomePage -IdentifierUris $identifierUri -StartDate $now -EndDate $oneYearFromNow -Password $ADAppPassword
-$servicePrincipal = New-AzADServicePrincipal -ApplicationId $ADApp.ApplicationId -WarningAction SilentlyContinue
-$aadClientID = $servicePrincipal.ApplicationId
-Write-Host "Successfully created a new AAD Application: $aadAppName with ID: $aadClientID" 
+$ADApp =  New-AzADApplication -DisplayName $aadAppName -HomePage $defaultHomePage -StartDate $now -EndDate $oneYearFromNow
+$credential = New-Object -TypeName "Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.ApiV10.MicrosoftGraphPasswordCredential" -Property @{'DisplayName' = 'labPassword';}
+$appCredential = New-AzADAppCredential -ObjectId $ADapp.Id -PasswordCredentials $credential
+$aadClientSecret = $appCredential.SecretText
+$servicePrincipal = New-AzADServicePrincipal -ApplicationId $ADApp.AppId
+$aadClientID = $servicePrincipal.AppId
+Write-Host "Successfully created a new AAD Application: $aadAppName with ID: $aadClientID"
+
 
 # Create the KeyVault
 Write-Host "Creating the KeyVault: $keyVaultName..."
-$keyVault = New-AzKeyVault -VaultName $keyVaultName -ResourceGroupName $ResourceGroupName -Sku Standard -Location $Location;
+$keyVault = New-AzKeyVault -VaultName $keyVaultName -ResourceGroupName $ResourceGroupName -Sku Standard -Location $Location -EnabledForDiskEncryption;
 # Set the permissions required to enable the DiskEncryption Policy
 Set-AzKeyVaultAccessPolicy -VaultName $keyVaultName -ServicePrincipalName $aadClientID `
    -PermissionsToKeys get,list,encrypt,decrypt,create,import,sign,verify,wrapKey,unwrapKey `
