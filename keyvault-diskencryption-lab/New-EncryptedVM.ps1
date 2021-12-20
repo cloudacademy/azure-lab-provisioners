@@ -43,7 +43,7 @@ $keyEncryptionKeyName = $("MyKey1" + "-" + $ResourceGroupName)
 Write-Host "Creating a new AD Application: $aadAppName..."
 $now = [System.DateTime]::Now
 $oneYearFromNow = $now.AddYears(1)
-$ADApp =  New-AzADApplication -DisplayName $aadAppName -HomePage $defaultHomePage -StartDate $now -EndDate $oneYearFromNow
+$ADApp =  New-AzADApplication -DisplayName $aadAppName -StartDate $now -EndDate $oneYearFromNow
 $credential = New-Object -TypeName "Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.ApiV10.MicrosoftGraphPasswordCredential" -Property @{'DisplayName' = 'labPassword';}
 $appCredential = New-AzADAppCredential -ObjectId $ADapp.Id -PasswordCredentials $credential
 $aadClientSecret = $appCredential.SecretText
