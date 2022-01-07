@@ -45,7 +45,7 @@ $now = [System.DateTime]::Now
 $oneYearFromNow = $now.AddYears(1)
 $ADApp =  New-AzADApplication -DisplayName $aadAppName -StartDate $now -EndDate $oneYearFromNow
 $credential = New-Object -TypeName "Microsoft.Azure.PowerShell.Cmdlets.Resources.MSGraph.Models.ApiV10.MicrosoftGraphPasswordCredential" -Property @{'DisplayName' = 'labPassword';}
-$appCredential = New-AzADAppCredential -ObjectId $ADapp.Id -PasswordCredentials $credential
+$appCredential = New-AzADAppCredential -ObjectId $ADapp.Id
 $aadClientSecret = $appCredential.SecretText
 $servicePrincipal = New-AzADServicePrincipal -ApplicationId $ADApp.AppId
 $aadClientID = $servicePrincipal.AppId
