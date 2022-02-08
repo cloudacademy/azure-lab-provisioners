@@ -2,7 +2,12 @@ function Install-AzurePowerShell {
     $ProgressPreference = 'SilentlyContinue'
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
     Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-    Install-Module Az.Compute, Az.Resources, Az.KeyVault, Az.Network, Az.Storage -Confirm:$false 
+    Install-Module Az.Accounts -RequiredVersion 2.7.2 -Confirm:$false
+    Install-Module Az.Resources -RequiredVersion 5.2.0 -Confirm:$false
+    Install-Module Az.Compute -RequiredVersion 4.23.0 -Confirm:$false
+    Install-Module Az.KeyVault -RequiredVersion 4.2.1 -Confirm:$false
+    Install-Module Az.Network -RequiredVersion 4.14.0 -Confirm:$false
+    Install-Module Az.Storage -RequiredVersion 4.2.0 -Confirm:$false
 }
 
 
