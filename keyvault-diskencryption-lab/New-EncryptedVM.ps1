@@ -29,7 +29,7 @@ $OSVersion = "latest"
 
 # Create the Resource Group
 #Write-Host "Creating ResourceGroup: $ResourceGroupName..."
-#New-AzureRmResourceGroup -Name $ResourceGroupName -Location $Location
+#New-AzResourceGroup -Name $ResourceGroupName -Location $Location
 
 #region KeyVault
 ############################## Create and Deploy the KeyVault and Keys ###############################
