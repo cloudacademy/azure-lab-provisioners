@@ -2,6 +2,7 @@ function Install-AzurePowerShell {
     $ProgressPreference = 'SilentlyContinue'
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
     Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 # GitHub only supports tls 1.2 now (PS use 1.0 by default)
     # Only install required packages to reduce startup time
     Install-Module -Name AzureRM -Confirm:$false
 }
@@ -9,7 +10,6 @@ function Install-AzurePowerShell {
 
 function Set-LabArtifacts {
     $ProgressPreference = 'SilentlyContinue' # Ignore progress updates (100X speedup)
-    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12 # GitHub only supports tls 1.2 now (PS use 1.0 by default)
     New-Item -ItemType Directory -Force -Path C:\Users\student\Desktop  # Force directory creation (in case student Desktop isn't created yet)
     Invoke-WebRequest -Uri "https://s3-us-west-2.amazonaws.com/clouda-labs-assets/azure-file-sync/StorageSyncAgent_V4_WS2016.msi" -OutFile "C:\Users\student\Desktop\StorageSyncAgent_V4_WS2016.msi"
     # Create backup
