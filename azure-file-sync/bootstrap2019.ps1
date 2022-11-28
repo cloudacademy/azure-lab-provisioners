@@ -1,6 +1,6 @@
 function Install-AzurePowerShell {
     $ProgressPreference = 'SilentlyContinue'
-    Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
+    Install-PackageProvider -Name NuGet -MinimumVersion 4.3.0 -Force -Confirm:$false
     Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
     # Only install required packages to reduce startup time
     Install-Module Azure.Storage, AzureRM.compute, AzureRM.resources, AzureRM.storage -Confirm:$false
