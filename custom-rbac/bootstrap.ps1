@@ -2,21 +2,26 @@ function Install-AzurePowerShell {
     $ProgressPreference = 'SilentlyContinue'
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
     Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
-    Install-Module Az.Resources -Confirm:$false 
+    Install-Module Az.Accounts -RequiredVersion 2.7.2 -Confirm:$false
+    Install-Module Az.Resources -RequiredVersion 5.2.0 -Confirm:$false
+    Install-Module Az.Compute -RequiredVersion 4.23.0 -Confirm:$false
+    Install-Module Az.KeyVault -RequiredVersion 4.2.1 -Confirm:$false
+    Install-Module Az.Network -RequiredVersion 4.14.0 -Confirm:$false
+    Install-Module Az.Storage -RequiredVersion 4.2.0 -Confirm:$false
 }
 
 
 function Set-LabArtifacts {
     $ProgressPreference = 'SilentlyContinue' # Ignore progress updates (100X speedup)
-    [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls" # GitHub only supports tls 1.2 now (PS use 1.0 by default)
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/custom-rbac/New-CustomRole.ps1" -OutFile C:\Users\student\Desktop\New-CustomRole.ps1
+    [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls" # Support tls 1.1, 1.2 (PS uses 1.0 by default)
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/keyvault-diskencryption-lab/New-EncryptedVM.ps1" -OutFile C:\Users\student\Desktop\New-EncryptedVM.ps1
     # Create backup
     $path = "C:\Scripts"
     if(!(Test-Path $path))
     {
         New-Item -ItemType Directory -Force -Path C:\Scripts
     }
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/custom-rbac/New-CustomRole.ps1" -OutFile $($path + "\" + "New-CustomRole.ps1")
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/keyvault-diskencryption-lab/New-EncryptedVM.ps1" -OutFile $($path + "\" + "New-EncryptedVM.ps1")
 
 }
 
@@ -44,12 +49,12 @@ function Disable-UserAccessControl {
 }
 
 # Disable Windows Defender real-time monitoring
-Set-MpPreference -DisableRealtimeMonitoring $true
+#Set-MpPreference -DisableRealtimeMonitoring $true
 
 # Disable Windows update
-Stop-Service -NoWait -displayname "Windows Update"
+#Stop-Service -NoWait -displayname "Windows Update"
 
-Set-LabArtifacts
 Disable-UserAccessControl
 Disable-InternetExplorerESC
 Install-AzurePowerShell
+Set-LabArtifacts
