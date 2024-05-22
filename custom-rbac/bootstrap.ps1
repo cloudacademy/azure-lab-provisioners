@@ -14,14 +14,14 @@ function Install-AzurePowerShell {
 function Set-LabArtifacts {
     $ProgressPreference = 'SilentlyContinue' # Ignore progress updates (100X speedup)
     [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls" # Support tls 1.1, 1.2 (PS uses 1.0 by default)
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/custom-rbac/New-CustomRole.ps1" -OutFile C:\Users\student\Desktop\New-EncryptedVM.ps1
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/custom-rbac/New-CustomRole.ps1" -OutFile C:\Users\student\Desktop\New-CustomRole.ps1
     # Create backup
     $path = "C:\Scripts"
     if(!(Test-Path $path))
     {
         New-Item -ItemType Directory -Force -Path C:\Scripts
     }
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/custom-rbac/New-CustomRole.ps1" -OutFile $($path + "\" + "New-EncryptedVM.ps1")
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/custom-rbac/New-CustomRole.ps1" -OutFile $($path + "\" + "New-CustomRole.ps1")
 
 }
 
