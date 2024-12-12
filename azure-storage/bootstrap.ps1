@@ -1,7 +1,15 @@
 function Set-LabArtifacts {
-    $ProgressPreference = 'SilentlyContinue' # Ignore progress updates (100X speedup)
-    [Net.ServicePointManager]::SecurityProtocol = "tls12, tls11, tls" # GitHub only supports tls 1.2 now (PS use 1.0 by default)
-    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/azure-storage/image.png" -OutFile C:\Users\student\Desktop\image.png
+    $ProgressPreference = 'SilentlyContinue'
+    [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+    # Download the image to Windows Temp folder
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/azure-storage/qaimage.png" -OutFile "C:\Windows\Temp\qaimage.png"
+
+    # Download the task XML. Using XML is preferred to minimize potential issues.
+    $taskXml = Invoke-WebRequest -Uri "https://raw.githubusercontent.com/cloudacademy/azure-lab-provisioners/master/azure-storage/task.xml" -UseBasicParsing | Select-Object -ExpandProperty Content
+
+    # Register the scheduled task using the XML definition
+    Register-ScheduledTask -TaskName "CopyImage" -Xml $taskXml -Force
 }
 
 function Disable-InternetExplorerESC {
