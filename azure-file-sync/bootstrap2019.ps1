@@ -1,11 +1,17 @@
+# Disable Windows Defender real-time monitoring
+Set-MpPreference -DisableRealtimeMonitoring $true
+
 function Install-AzurePowerShell {
     $ProgressPreference = 'SilentlyContinue'
     Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force -Confirm:$false
     Set-PSRepository -Name PSGallery -InstallationPolicy Trusted
+    
     # Only install required packages to reduce startup time
-    Install-Module -Name Az -Confirm:$false
+    $modules = @("Az.Accounts", "Az.StorageSync", "Az.Storage", "Az.Resources") 
+    foreach ($module in $modules) {
+        Install-Module -Name $module -Force -AllowClobber -Confirm:$false
+    }
 }
-
 
 function Set-LabArtifacts {
     $ProgressPreference = 'SilentlyContinue' # Ignore progress updates (100X speedup)
@@ -43,9 +49,6 @@ function Disable-UserAccessControl {
     Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "ConsentPromptBehaviorAdmin" -Value 00000000 -Force
     Write-Host "User Access Control (UAC) has been disabled." -ForegroundColor Green
 }
-
-# Disable Windows Defender real-time monitoring
-Set-MpPreference -DisableRealtimeMonitoring $true
 
 # Disable Windows update
 Stop-Service -NoWait -displayname "Windows Update"
